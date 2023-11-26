@@ -31,8 +31,8 @@ num_classes      = int(os.getenv('DH_NUM_CLASSES', '10'))
 
 INITIALPOP       = os.getenv('DH_INITIALPOP', 'seeded')
 
-MODEL            = os.getenv('DH_MODEL', 'models/model_mnist.h5')
-#MODEL            = os.getenv('DH_MODEL', 'models/cnnClassifierTest.h5')
+MODEL1            = os.getenv('DH_MODEL', 'models/model_mnist.h5')
+MODEL2            = os.getenv('DH_MODEL', 'models/cnnClassifier.h5')
 
 ORIGINAL_SEEDS   = os.getenv('DH_ORIGINAL_SEEDS', 'bootstraps_five')
 

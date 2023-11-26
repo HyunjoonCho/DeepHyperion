@@ -4,13 +4,14 @@ import keras
 
 import numpy as np
 
-from properties import MODEL, EXPECTED_LABEL, num_classes
+from properties import MODEL1, MODEL2, EXPECTED_LABEL, num_classes
 
 
 class Predictor:
 
     # Load the pre-trained model.
-    model = keras.models.load_model(MODEL)
+    model1 = keras.models.load_model(MODEL1)
+    model2 = keras.models.load_model(MODEL2)
     print("Loaded model from disk")
 
     @staticmethod
@@ -22,18 +23,10 @@ class Predictor:
         explabel = np.argmax(explabel.squeeze())
 
          #Predictions vector
-        predictions = Predictor.model.predict(img)
+        predictions1 = Predictor.model1.predict(img)
+        predictions2 = Predictor.model2.predict(img)
 
-        prediction1, prediction2 = np.argsort(-predictions[0])[:2]
+        prediction1 = np.argsort(-predictions1[0])[0]
+        prediction2 = np.argsort(-predictions2[0])[0]
 
-        # Activation level corresponding to the expected class
-        confidence_expclass = predictions[0][explabel]
-
-        if prediction1 != EXPECTED_LABEL:
-            confidence_notclass = predictions[0][prediction1]
-        else:
-            confidence_notclass = predictions[0][prediction2]
-
-        confidence = confidence_expclass - confidence_notclass
-
-        return prediction1, confidence
+        return prediction1, prediction2, sum([abs(x - y) for x, y in zip(predictions1[0], predictions2[0])])
