@@ -285,21 +285,21 @@ class IlluminationMap:
     # def _total_cells(self, features):
     #     return int(np.prod([a.num_cells for a in features]))
 
-    def _total_misbehaviors(self, samples: set) -> int:
-        return len([s for s in samples if s.is_misbehavior()])
+    def _total_diff_behaviors(self, samples: set) -> int:
+        return len([s for s in samples if s.is_diff_behavior()])
 
     def _total_samples(self, samples: set) -> int:
         return len(samples)
 
-    def _mapped_misbehaviors_from_map(self, misbehavior_data):
+    def _mapped_diff_behaviors_from_map(self, diff_behavior_data):
         """
         Args:
-            misbehaviour_data a matrix that contains the count of misbheaviors per cell
+            diff_behaviour_data a matrix that contains the count of misbheaviors per cell
         Returns:
-            the count of cells for which at least one sample is a misbehavior.
+            the count of cells for which at least one sample is a diff_behavior.
 
         """
-        return np.count_nonzero(misbehavior_data > 0)
+        return np.count_nonzero(diff_behavior_data > 0)
 
     def _filled_cells_from_map(self, coverage_data):
         """
@@ -309,20 +309,20 @@ class IlluminationMap:
         # https://note.nkmk.me/en/python-numpy-count/
         return np.count_nonzero(coverage_data > 0)
 
-    def _relative_density_of_mapped_misbehaviors_from_map(self, coverage_data, misbehavior_data):
+    def _relative_density_of_mapped_diff_behaviors_from_map(self, coverage_data, diff_behavior_data):
         """
         Returns:
-            the density of misbehaviors in a map computed w.r.t. the amount of filled cells in the map
+            the density of diff_behaviors in a map computed w.r.t. the amount of filled cells in the map
         """
         filled_cells = self._filled_cells_from_map(coverage_data)
-        return self._mapped_misbehaviors_from_map(misbehavior_data) / filled_cells if filled_cells > 0 else np.NaN
+        return self._mapped_diff_behaviors_from_map(diff_behavior_data) / filled_cells if filled_cells > 0 else np.NaN
 
-    def _density_of_mapped_misbehavior_from_maps(self, misbehavior_data):
+    def _density_of_mapped_diff_behavior_from_maps(self, diff_behavior_data):
         """
         Returns:
-            the density of misbehaviors in a map computed
+            the density of diff_behaviors in a map computed
         """
-        return self._mapped_misbehaviors_from_map(misbehavior_data) / misbehavior_data.size
+        return self._mapped_diff_behaviors_from_map(diff_behavior_data) / diff_behavior_data.size
 
     def _density_of_covered_cells_from_map(self, coverage_data):
         """
@@ -355,12 +355,12 @@ class IlluminationMap:
         auc = np.trapz(x = time_series, y= coverage_series)
         return auc
 
-    def _auc_mapped_misbehaviors(self, misbehavior_series, time_series):
+    def _auc_mapped_diff_behaviors(self, diff_behavior_series, time_series):
         """
         Returns:
-            the area under the curv of mapped misbehaviours and time diagram
+            the area under the curv of mapped diff_behaviours and time diagram
         """
-        auc = np.trapz(x = time_series, y= misbehavior_series)
+        auc = np.trapz(x = time_series, y= diff_behavior_series)
         return auc
 
     def _get_tool(self, samples):
@@ -426,8 +426,8 @@ class IlluminationMap:
         report["Total Samples"] = self._total_samples(filtered_samples) + self._total_samples(filtered_invalid_samples)
         report["Valid Samples"] = self._total_samples(filtered_samples)
         report["Invalid Samples"] = self._total_samples(filtered_invalid_samples)
-        report["Total Misbehaviors"] = self._total_misbehaviors(filtered_samples)
-        report["MisbehaviorPerSample"] = report["Total Misbehaviors"] / report["Total Samples"]
+        report["Total Diff-behaviors"] = self._total_diff_behaviors(filtered_samples)
+        report["Diff-behaviorPerSample"] = report["Total Diff-behaviors"] / report["Total Samples"]
 
         # Per Feature Statistics
         report["Features"] = {}
@@ -471,9 +471,9 @@ class IlluminationMap:
                 filtered_samples = drop_outliers_for(feature2, filtered_samples)
 
             # Build the map data: For the moment forget about outer maps, those are mostly for visualization!
-            coverage_data, misbehavior_data, _, _ = self._compute_maps_data(feature1, feature2, filtered_samples)
+            coverage_data, diff_behavior_data, _, _ = self._compute_maps_data(feature1, feature2, filtered_samples)
             # Build the vectors for computing auc wrt time
-            coverage_auc_data, misbehavior_auc_data, time_data  = self._compute_auc_data(feature1, feature2, filtered_samples)
+            coverage_auc_data, diff_behavior_auc_data, time_data  = self._compute_auc_data(feature1, feature2, filtered_samples)
 
             # Compute statistics over the map data
             map_report = {
@@ -484,27 +484,27 @@ class IlluminationMap:
                 'Outlier Count': len(total_samples_in_the_map) - len(filtered_samples),
                 'Total Cells': coverage_data.size,
                 'Filled Cells': self._filled_cells_from_map(coverage_data),
-                'Mapped Misbehaviors': self._mapped_misbehaviors_from_map(misbehavior_data),
+                'Mapped Diff-behaviors': self._mapped_diff_behaviors_from_map(diff_behavior_data),
                 # Density
-                'Misbehavior Relative Density': self._relative_density_of_mapped_misbehaviors_from_map(coverage_data, misbehavior_data),
-                'Misbehavior Density': self._density_of_mapped_misbehavior_from_maps(misbehavior_data),
+                'Diff-behavior Relative Density': self._relative_density_of_mapped_diff_behaviors_from_map(coverage_data, diff_behavior_data),
+                'Diff-behavior Density': self._density_of_mapped_diff_behavior_from_maps(diff_behavior_data),
                 'Filled Cells Density': self._density_of_covered_cells_from_map(coverage_data),
                 'Collisions': self._count_collisions(coverage_data),
-                'Misbehavior Collisions': self._count_collisions(misbehavior_data),
+                'Diff-behavior Collisions': self._count_collisions(diff_behavior_data),
                 'Collision Ratio': self._collisions_ratio(coverage_data),
-                'Misbehavior Collision Ratio': self._collisions_ratio(misbehavior_data),
+                'Diff-behavior Collision Ratio': self._collisions_ratio(diff_behavior_data),
                 # Sparseness
                 'Coverage Sparseness': self._avg_max_distance_between_filled_cells_from_map(coverage_data),
-                'Misbehavior Sparseness': self._avg_max_distance_between_filled_cells_from_map(misbehavior_data),
+                'Diff-behavior Sparseness': self._avg_max_distance_between_filled_cells_from_map(diff_behavior_data),
                 # The follwing two only for retro-compability
                 'Avg Sample Distance': self._avg_sparseness_from_map(coverage_data),
-                'Avg Misbehavior Distance': self._avg_sparseness_from_map(misbehavior_data),                
+                'Avg Diff-behavior Distance': self._avg_sparseness_from_map(diff_behavior_data),                
                 # Area under the curv
                 'AUC Filled Cells': self._auc_filled_cells(coverage_auc_data, time_data),
-                'AUC Mapped Misbehaviors': self._auc_mapped_misbehaviors(misbehavior_auc_data, time_data),
+                'AUC Mapped Diff-behaviors': self._auc_mapped_diff_behaviors(diff_behavior_auc_data, time_data),
                 # Area under the curv
                 'AUC Filled Cells': self._auc_filled_cells(coverage_auc_data, time_data),
-                'AUC Mapped Misbehaviors': self._auc_mapped_misbehaviors(misbehavior_auc_data, time_data)
+                'AUC Mapped Diff-behaviors': self._auc_mapped_diff_behaviors(diff_behavior_auc_data, time_data)
             }
 
             report["Reports"].append(map_report)
@@ -514,24 +514,24 @@ class IlluminationMap:
     def _compute_maps_data(self, feature1, feature2, samples):
         """
         Create the raw data for the map by placing the samples on the map and counting for each cell how many samples
-        are there and how many misbehaviors
+        are there and how many diff_behaviors
         Args:
             feature1:
             feature2:
             samples:
 
         Returns:
-            coverage_map, misbehavior_map
-            coverage_outer_map, misbehavior_outer_map
+            coverage_map, diff_behavior_map
+            coverage_outer_map, diff_behavior_outer_map
         """
         # TODO Refactor:
 
         # Reshape the data as ndimensional array. But account for the lower and upper bins.
         coverage_data = np.zeros(shape=(feature1.num_cells, feature2.num_cells), dtype=int)
-        misbehaviour_data = np.zeros(shape=(feature1.num_cells, feature2.num_cells), dtype=int)
+        diff_behaviour_data = np.zeros(shape=(feature1.num_cells, feature2.num_cells), dtype=int)
 
         coverage_outer_data = np.zeros(shape=(feature1.num_cells + 2, feature2.num_cells + 2), dtype=int)
-        misbehaviour_outer_data = np.zeros(shape=(feature1.num_cells + 2, feature2.num_cells + 2), dtype=int)
+        diff_behaviour_outer_data = np.zeros(shape=(feature1.num_cells + 2, feature2.num_cells + 2), dtype=int)
 
         for sample in samples:
 
@@ -542,9 +542,9 @@ class IlluminationMap:
             # Increment the coverage cell
             coverage_data[x_coord, y_coord] += 1
 
-            # Increment the misbehaviour cell
-            if sample.is_misbehavior():
-                misbehaviour_data[x_coord, y_coord] += 1
+            # Increment the diff_behaviour cell
+            if sample.is_diff_behavior():
+                diff_behaviour_data[x_coord, y_coord] += 1
 
             # Outer Maps
             x_coord = feature1.get_coordinate_for(sample, is_outer_map=True) - 1
@@ -553,33 +553,33 @@ class IlluminationMap:
             # Increment the coverage cell
             coverage_outer_data[x_coord, y_coord] += 1
 
-            # Increment the misbehaviour cell
-            if sample.is_misbehavior():
-                misbehaviour_outer_data[x_coord, y_coord] += 1
+            # Increment the diff_behaviour cell
+            if sample.is_diff_behavior():
+                diff_behaviour_outer_data[x_coord, y_coord] += 1
 
-        return coverage_data, misbehaviour_data, coverage_outer_data, misbehaviour_outer_data
+        return coverage_data, diff_behaviour_data, coverage_outer_data, diff_behaviour_outer_data
 
     def _compute_auc_data(self, feature1, feature2, samples):
         """
-        Create the raw data for the map by placing the samples on the map and counting filled cells and misbehaviours during time
+        Create the raw data for the map by placing the samples on the map and counting filled cells and diff_behaviours during time
         Args:
             feature1:
             feature2:
             samples:
         Returns:
-            coverage_auc, misbehavior_auc, time_data
+            coverage_auc, diff_behavior_auc, time_data
         """
         # TODO Refactor:
 
         # Reshape the data as ndimensional array. But account for the lower and upper bins.
         coverage_data = np.zeros(shape=(feature1.num_cells, feature2.num_cells), dtype=int)
-        misbehaviour_data = np.zeros(shape=(feature1.num_cells, feature2.num_cells), dtype=int)
+        diff_behaviour_data = np.zeros(shape=(feature1.num_cells, feature2.num_cells), dtype=int)
 
         coverage = 0
-        misbehavior = 0
+        diff_behavior = 0
 
         coverage_auc_data = []
-        misbehaviour_auc_data = []
+        diff_behaviour_auc_data = []
         time_data = []
 
         i = 0
@@ -594,22 +594,22 @@ class IlluminationMap:
                 coverage += 1
                 coverage_data[x_coord, y_coord] = 1
 
-            if sample.is_misbehavior() and misbehaviour_data[x_coord, y_coord] == 0:
-                # Increment the misbehaviour 
-                misbehavior += 1
-                misbehaviour_data[x_coord, y_coord] = 1
+            if sample.is_diff_behavior() and diff_behaviour_data[x_coord, y_coord] == 0:
+                # Increment the diff_behaviour 
+                diff_behavior += 1
+                diff_behaviour_data[x_coord, y_coord] = 1
 
             coverage_auc_data.append(coverage)
-            misbehaviour_auc_data.append(misbehavior)
+            diff_behaviour_auc_data.append(diff_behavior)
             millisecs = elapsed_to_millisec(sample.elapsed)
             time_data.append(millisecs)
 
-        return coverage_auc_data, misbehaviour_auc_data, time_data
+        return coverage_auc_data, diff_behaviour_auc_data, time_data
 
 
     def visualize_probability(self, tags=None, feature_selector=None, sample_selector=None):
         """
-            Visualize the probability of finding a misbehavior in a give cell, computed as the total of misbehavior over
+            Visualize the probability of finding a diff_behavior in a give cell, computed as the total of diff_behavior over
             the total samples in each cell. This is defined only for cells that have samples in them. Also store
             the probability data so they can be post-processed (e.g., average across run/configuration)
         """
@@ -626,13 +626,13 @@ class IlluminationMap:
             filtered_features = feature_selector(self.axes)
 
         figures = []
-        # Might be redundant if we store also misbehaviour_maps and coverage_maps
+        # Might be redundant if we store also diff_behaviour_maps and coverage_maps
         probability_maps = []
         # To compute confidence intervals and possibly other metrics on the map
-        misbehaviour_maps = []
+        diff_behaviour_maps = []
         coverage_maps = []
         coverage_aucs = []
-        misbehaviour_aucs = []
+        diff_behaviour_aucs = []
 
         total_samples_in_the_map = filtered_samples
 
@@ -646,12 +646,12 @@ class IlluminationMap:
                 filtered_samples = drop_outliers_for(feature1, filtered_samples)
                 filtered_samples = drop_outliers_for(feature2, filtered_samples)
 
-            coverage_data, misbehaviour_data, _, _ = self._compute_maps_data(feature1, feature2, filtered_samples)
-            coverage_auc_data, misbehavior_auc_data, time_data  = self._compute_auc_data(feature1, feature2, filtered_samples)
+            coverage_data, diff_behaviour_data, _, _ = self._compute_maps_data(feature1, feature2, filtered_samples)
+            coverage_auc_data, diff_behavior_auc_data, time_data  = self._compute_auc_data(feature1, feature2, filtered_samples)
 
             coverage_auc = np.column_stack((time_data, coverage_auc_data))
 
-            misbehaviour_auc = np.column_stack((time_data, misbehavior_auc_data))
+            diff_behaviour_auc = np.column_stack((time_data, diff_behavior_auc_data))
 
             # figure
             fig, ax = plt.subplots(figsize=(8, 8))
@@ -665,8 +665,8 @@ class IlluminationMap:
             cmap.set_bad(color='white')
 
             # Coverage data might be zero, so this produces Nan. We convert that to 0.0
-            # probability_data = np.nan_to_num(misbehaviour_data / coverage_data)
-            raw_probability_data = misbehaviour_data / coverage_data
+            # probability_data = np.nan_to_num(diff_behaviour_data / coverage_data)
+            raw_probability_data = diff_behaviour_data / coverage_data
 
             # For some weird reason the data in the heatmap are shown with the first dimension on the y and the
             # second on the x. So we transpose
@@ -715,9 +715,9 @@ class IlluminationMap:
                 "store_to": "-".join(["probability", tool_name, run_id, feature1.feature_name, feature2.feature_name])
             })
 
-            misbehaviour_maps.append({
-                    "data": misbehaviour_data,
-                    "store_to": "-".join(["misbehaviour", tool_name, run_id, feature1.feature_name, feature2.feature_name])
+            diff_behaviour_maps.append({
+                    "data": diff_behaviour_data,
+                    "store_to": "-".join(["diff_behaviour", tool_name, run_id, feature1.feature_name, feature2.feature_name])
             })
 
             coverage_maps.append({
@@ -731,13 +731,13 @@ class IlluminationMap:
                     "store_to": "-".join(["auc_coverage", tool_name, run_id, feature1.feature_name, feature2.feature_name])
             })
 
-            misbehaviour_aucs.append({
-                    "data": misbehaviour_auc,
-                    "store_to": "-".join(["auc_misbehaviour", tool_name, run_id, feature1.feature_name, feature2.feature_name])
+            diff_behaviour_aucs.append({
+                    "data": diff_behaviour_auc,
+                    "store_to": "-".join(["auc_diff_behaviour", tool_name, run_id, feature1.feature_name, feature2.feature_name])
             })
 
 
-        return figures, probability_maps, misbehaviour_maps, coverage_maps, misbehaviour_aucs, coverage_aucs
+        return figures, probability_maps, diff_behaviour_maps, coverage_maps, diff_behaviour_aucs, coverage_aucs
 
 
     def visualize(self, tags=None, feature_selector=None, sample_selector=None):
@@ -782,7 +782,7 @@ class IlluminationMap:
                 filtered_samples = drop_outliers_for(feature2, filtered_samples)
 
             # TODO For the moment, since filtered_Samples might be different we need to rebuild this every time
-            coverage_data, misbehaviour_data, _, _ = self._compute_maps_data(feature1, feature2, filtered_samples)
+            coverage_data, diff_behaviour_data, _, _ = self._compute_maps_data(feature1, feature2, filtered_samples)
 
             # figure
             fig, ax = plt.subplots(figsize=(8, 8))
@@ -797,10 +797,10 @@ class IlluminationMap:
 
             sns.heatmap(coverage_data, vmin=1, vmax=20, square=True, cmap=cmap)
 
-            # Plot misbehaviors - Iterate over all the elements of the array to get their coordinates:
-            it = np.nditer(misbehaviour_data, flags=['multi_index'])
+            # Plot diff_behaviors - Iterate over all the elements of the array to get their coordinates:
+            it = np.nditer(diff_behaviour_data, flags=['multi_index'])
             for v in it:
-                # Plot only misbehaviors
+                # Plot only diff_behaviors
                 if v > 0:
                     alpha = 0.1 * v if v <= 10 else 1.0
                     (x, y) = it.multi_index
@@ -818,7 +818,7 @@ class IlluminationMap:
             tool_name = str(self._get_tool(filtered_samples))
             run_id = str(self._get_run_id(filtered_samples)).zfill(3)
 
-            title_tokens = ["Collisions and Mishbehaviors", "\n"]
+            title_tokens = ["Collisions and Diff-behaviors", "\n"]
             title_tokens.extend(["Tool:", tool_name, "--", "Run ID:", run_id])
 
             if tags is not None and len(tags) > 0:
@@ -838,7 +838,7 @@ class IlluminationMap:
             plt.ylabel(feature2.feature_name)
 
             # Add the store_to attribute to the figure object
-            store_to = "-".join(["collision", "misbehavior", tool_name, run_id, feature1.feature_name, feature2.feature_name])
+            store_to = "-".join(["collision", "diff_behavior", tool_name, run_id, feature1.feature_name, feature2.feature_name])
             setattr(fig, "store_to", store_to)
 
             figures.append(fig)

@@ -33,7 +33,7 @@ with open(ORIGINAL_SEEDS) as f:
 def generate_digit(seed):
     seed_image = x_test[int(seed)]
     xml_desc = vectorization_tools.vectorize(seed_image)
-    return Digit(xml_desc, EXPECTED_LABEL, seed)
+    return Digit(xml_desc, seed)
 
 
 class MapElitesMNIST(MapElites):

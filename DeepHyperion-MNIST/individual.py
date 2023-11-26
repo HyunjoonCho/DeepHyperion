@@ -19,11 +19,12 @@ class Individual(object):
 
     def evaluate(self):
         if self.ff is None:          
-            self.member.predicted_label, self.member.confidence = \
+            self.member.predicted_label1, self.member.predicted_label2, self.member.activation_difference = \
                 predictor.Predictor.predict(self.member.purified)
 
-            # Calculate fitness function
-            self.ff = self.member.confidence if self.member.confidence > 0 else -0.1
+            # Calculate fitness function 
+            # TODO: need tuning of fitness cacluation / may flip the minimization flag
+            self.ff = self.member.activation_difference / 5 if self.member.predicted_label1 == self.member.predicted_label1 else -1.0
             
         return self.ff
 

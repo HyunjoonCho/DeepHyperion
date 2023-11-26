@@ -11,7 +11,7 @@ import numpy as np
 class Digit:
     COUNT = 0
 
-    def __init__(self, desc, label, seed):
+    def __init__(self, desc, seed):
         self.timestamp, self.elapsed_time = Timer.get_timestamps()
         self.id = Digit.COUNT
         self.run = RUN
@@ -21,9 +21,9 @@ class Digit:
         self.tool = "DeepHyperion"
         self.xml_desc = desc
         self.purified = rasterization_tools.rasterize_in_memory(self.xml_desc)
-        self.expected_label = label
-        self.predicted_label = None
-        self.confidence = None
+        self.predicted_label1 = None
+        self.predicted_label2 = None
+        self.activation_difference = None
         self.rank = np.inf
         self.selected_counter = 0
         self.placed_mutant = 0
@@ -32,10 +32,9 @@ class Digit:
     def to_dict(self):
         return {'id': str(self.id),
                 'seed': str(self.seed),
-                'expected_label': str(self.expected_label),
-                'predicted_label': str(self.predicted_label),
-                'misbehaviour': self.is_misbehavior(),
-                'performance': str(self.confidence),
+                'predicted_label': str(self.predicted_label1),
+                'diff_behaviour': self.is_diff_behavior(),
+                'performance': str(self.activation_difference),
                 'timestamp': str(self.timestamp),
                 'elapsed': str(self.elapsed_time),
                 'tool' : str(self.tool),
@@ -67,8 +66,8 @@ class Digit:
         with open(filedest, 'w') as f:
             f.write(data)
 
-    def is_misbehavior(self):
-        if self.expected_label == self.predicted_label:
+    def is_diff_behavior(self):
+        if self.predicted_label1 != self.predicted_label2:
             return False
         else:
             return True
@@ -84,5 +83,5 @@ class Digit:
         self.save_svg(dst)
 
     def clone(self):
-        clone_digit = Digit(self.xml_desc, self.expected_label, self.seed)
+        clone_digit = Digit(self.xml_desc, self.seed)
         return clone_digit

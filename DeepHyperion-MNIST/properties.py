@@ -39,7 +39,8 @@ num_classes      = int(os.getenv('DH_NUM_CLASSES', '10'))
 
 INITIALPOP       = os.getenv('DH_INITIALPOP', 'seeded')
 
-MODEL            = os.getenv('DH_MODEL', 'models/model_mnist.h5')
+MODEL1            = os.getenv('DH_MODEL', 'models/model_mnist.h5')
+MODEL2            = os.getenv('DH_MODEL', 'models/cnnClassifier.h5')
 
 ORIGINAL_SEEDS   = os.getenv('DH_ORIGINAL_SEEDS', 'bootstraps_five')
 
@@ -99,7 +100,8 @@ def to_json(folder):
         'label': str(EXPECTED_LABEL),
         'mut low': str(MUTLOWERBOUND),
         'mut up': str(MUTUPPERBOUND),
-        'model': str(MODEL),
+        'model1': str(MODEL1),
+        'model2': str(MODEL2),
         'runtime': str(RUNTIME),
         'run': str(RUN),
         'features': str(FEATURES),

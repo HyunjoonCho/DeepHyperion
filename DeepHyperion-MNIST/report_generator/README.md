@@ -3,7 +3,7 @@
 ## Goal
 
 Uniform the analyses required to extract features form _samples_, generate rescaled maps (considering all the samples), 
-and compute metrics of interests (misbehaviors, density, etc.)
+and compute metrics of interests (diff_behaviors, density, etc.)
 
 ## Pipeline
 
@@ -95,9 +95,9 @@ The steps to generate the maps are:
    This command produces many files in the `logs/run_XXX/archive` folder; the most relevant ones are:
 
    * `auc-coverage-DeepHyperion-<RUN_ID>-orientation-bitmaps-Orientation-Bitmaps.npy`
-   * `auc-misbehaviour-DeepHyperion-<RUN_ID>-orientation-bitmaps-Orientation-Bitmaps.npy`
+   * `auc-diff_behaviour-DeepHyperion-<RUN_ID>-orientation-bitmaps-Orientation-Bitmaps.npy`
    * `coverage-DeepHyperion-<RUN_ID>-orientation-bitmaps-Orientation-Bitmaps.npy`
-   * `misbehaviour-DeepHyperion-<RUN_ID>-orientation-bitmaps-Orientation-Bitmaps.npy`
+   * `diff_behaviour-DeepHyperion-<RUN_ID>-orientation-bitmaps-Orientation-Bitmaps.npy`
    * `probability-DeepHyperion-<RUN_ID>-orientation-bitmaps-Orientation-Bitmap.npy`
    * `DeepHyperion-<RUN_ID>-Orientation-Bitmaps-stats.json`
    * `probability-DeepHyperion-<RUN_ID>-orientation-bitmaps-Orientation-Bitmaps.pdf`
