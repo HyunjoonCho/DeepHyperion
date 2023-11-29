@@ -17,7 +17,7 @@ from digit_input import Digit
 from individual import Individual
 from properties import NGEN, \
     POPSIZE, EXPECTED_LABEL, INITIALPOP, \
-    ORIGINAL_SEEDS, BITMAP_THRESHOLD, FEATURES, TSHD_TYPE, DISTANCE, DISTANCE_SEED, MUTLOWERBOUND, MUTUPPERBOUND, MODEL, \
+    ORIGINAL_SEEDS, BITMAP_THRESHOLD, FEATURES, TSHD_TYPE, DISTANCE, DISTANCE_SEED, MUTLOWERBOUND, MUTUPPERBOUND, MODEL1, MODEL2, \
     RUNTIME, RUN
 import utils
 
@@ -168,7 +168,8 @@ class MapElitesMNIST(MapElites):
             'label': str(EXPECTED_LABEL),
             'mut low': str(MUTLOWERBOUND),
             'mut up': str(MUTUPPERBOUND),
-            'model': str(MODEL),
+            'model1': str(MODEL1),
+            'model2': str(MODEL2),
             'runtime': str(RUNTIME),
             'run': str(RUN),
             'features': str(FEATURES),

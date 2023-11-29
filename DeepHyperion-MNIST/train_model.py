@@ -3,22 +3,22 @@ import sys
 import numpy as np
 from os import makedirs
 from os.path import exists
-import tensorflow as tf
+import keras
 
 CLIP_MIN = -0.5
 CLIP_MAX = 0.5
 
-K = tf.keras.backend
-mnist = tf.keras.datasets.mnist
-np_utils = tf.keras.utils
-Sequential = tf.keras.models.Sequential
-Dense = tf.keras.layers.Dense
-Dropout = tf.keras.layers.Dropout
-Activation = tf.keras.layers.Activation
-Flatten = tf.keras.layers.Flatten
-Conv2D = tf.keras.layers.Conv2D
-MaxPooling2D = tf.keras.layers.MaxPooling2D
-l2 = tf.keras.regularizers.l2
+K = keras.backend
+mnist = keras.datasets.mnist
+np_utils = keras.utils
+Sequential = keras.models.Sequential
+Dense = keras.layers.Dense
+Dropout = keras.layers.Dropout
+Activation = keras.layers.Activation
+Flatten = keras.layers.Flatten
+Conv2D = keras.layers.Conv2D
+MaxPooling2D = keras.layers.MaxPooling2D
+l2 = keras.regularizers.l2
 
 
 def train(name):
