@@ -30,7 +30,8 @@ class Digit:
     def to_dict(self):
         return {'id': str(self.id),
                 'seed': str(self.seed),
-                'predicted_label': str(self.predicted_label1),
+                'predicted_label1': str(self.predicted_label1),
+                'predicted_label2': str(self.predicted_label2),
                 'diff_behaviour': self.is_diff_behavior(),
                 'performance': str(self.activation_difference),
                 'timestamp': str(self.timestamp),
