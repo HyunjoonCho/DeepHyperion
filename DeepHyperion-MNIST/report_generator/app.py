@@ -481,12 +481,12 @@ def generate_map(ctx, visualize, drop_outliers, feature, tag, at, run_folder):
         # store figures without showing them
         _store_figures_to_folder(figures, _tags, run_folder)
 
-        figures, probability_maps, misbehaviour_maps, coverage_maps = the_map.visualize_probability(tags=_tags, sample_selector=select_samples)
+        figures, probability_maps, diff_behaviour_maps, coverage_maps = the_map.visualize_probability(tags=_tags, sample_selector=select_samples)
         # store the outputs
         _store_figures_to_folder(figures, _tags, run_folder)
         # store maps
         _store_maps_to_folder(probability_maps, _tags, run_folder)
-        _store_maps_to_folder(misbehaviour_maps, _tags, run_folder)
+        _store_maps_to_folder(diff_behaviour_maps, _tags, run_folder)
         _store_maps_to_folder(coverage_maps, _tags, run_folder)
 
     # Visualize Everything at the end

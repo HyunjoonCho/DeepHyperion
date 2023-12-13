@@ -19,7 +19,7 @@ class Sample:
     def __init__(self):
         self.id = None
         self.tool = None
-        self.misbehaviour = False
+        self.diff_behaviour = False
         self.run = None
         self.timestamp = None
         self.elapsed = None
@@ -28,8 +28,8 @@ class Sample:
         self.valid_according_to = None
 
     # TODO Maybe make this an abstract method?
-    def is_misbehavior(self):
-        return self.misbehaviour
+    def is_diff_behavior(self):
+        return self.diff_behaviour
 
     def get_value(self, feature_name):
         if feature_name in self.features.keys():
@@ -52,8 +52,8 @@ class MNistSample(Sample):
         self.basepath = basepath
         self.performance = None
         self.seed = None
-        self.expected_label = None
-        self.predicted_label = None
+        self.predicted_label1 = None
+        self.predicted_label2 = None
         self.xml_desc = None
         self.image = None
 
@@ -64,11 +64,11 @@ class MNistSample(Sample):
 
         return {'id': self.id,
                 'seed': self.seed,
-                'expected_label': self.expected_label,
-                'predicted_label': self.predicted_label,
+                'predicted_label1': self.predicted_label1,
+                'predicted_label2': self.predicted_label2,
                 'is_valid': self.is_valid,
                 'valid_according_to': self.valid_according_to,
-                'misbehaviour': self.is_misbehavior(),
+                'diff_behaviour': self.is_diff_behavior(),
                 'performance': self.performance,
                 'elapsed': self.elapsed,
                 'timestamp': self.timestamp,
@@ -100,7 +100,7 @@ class DLFuzzSample(MNistSample):
         "Moves"
     ],
     "id": 98,                                   (Sample)
-    "misbehaviour": false,                      (Sample)
+    "diff_behaviour": false,                      (Sample)
     "performance": "0.9999646",                 (MNistSample)
     "predicted_label": 5,                       (MNistSample)
     "run": "0",                                 (Sample)
@@ -133,7 +133,7 @@ class DLFuzzSample(MNistSample):
         # Set Sample attributes
         self.id = json_data["id"]
         self.tool = json_data["tool"]
-        self.misbehaviour = json_data["misbehaviour"]
+        self.diff_behaviour = json_data["diff_behaviour"]
         self.run = json_data["run"]
         self.timestamp = json_data["timestamp"]
         self.elapsed = json_data["elapsed"]
@@ -144,8 +144,8 @@ class DLFuzzSample(MNistSample):
 
         # Set MNistSample attributes
         self.performance = json_data["performance"]
-        self.predicted_label = json_data["predicted_label"]
-        self.expected_label = json_data["expected_label"]
+        self.predicted_label1 = json_data["predicted_label1"]
+        self.predicted_label2 = json_data["predicted_label2"]
         self.seed = json_data["seed"]
 
         # Store to file besides the input json
@@ -168,7 +168,7 @@ class DeepJanusSample(MNistSample):
         "Moves"
     ],
     "id": 98,                                   (Sample)
-    "misbehaviour": false,                      (Sample)
+    "diff_behaviour": false,                      (Sample)
     "performance": "0.9999646",                 (MNistSample)
     "predicted_label": 5,                       (MNistSample)
     "run": "0",                                 (Sample)
@@ -202,7 +202,7 @@ class DeepJanusSample(MNistSample):
         # Set Sample attributes
         self.id = json_data["id"]
         self.tool = json_data["tool"]
-        self.misbehaviour = json_data["misbehaviour"]
+        self.diff_behaviour = json_data["diff_behaviour"]
         self.run = json_data["run"]
         self.timestamp = json_data["timestamp"]
         self.elapsed = json_data["elapsed"]
@@ -214,8 +214,8 @@ class DeepJanusSample(MNistSample):
 
         # Set MNistSample attributes
         self.performance = json_data["performance"]
-        self.predicted_label = json_data["predicted_label"]
-        self.expected_label = json_data["expected_label"]
+        self.predicted_label1 = json_data["predicted_label1"]
+        self.predicted_label2 = json_data["predicted_label2"]
         self.seed = json_data["seed"]
 
         # Store to file besides the input json
@@ -236,7 +236,7 @@ class DeepHyperionSample(MNistSample):
         "Moves"
     ],
     "id": 98,                                   (Sample)
-    "misbehaviour": false,                      (Sample)
+    "diff_behaviour": false,                      (Sample)
     "performance": "0.9999646",                 (MNistSample)
     "predicted_label": 5,                       (MNistSample)
     "run": "0",                                 (Sample)
@@ -270,7 +270,7 @@ class DeepHyperionSample(MNistSample):
         # Set Sample attributes
         self.id = json_data["id"]
         self.tool = json_data["tool"]
-        self.misbehaviour = json_data["misbehaviour"]
+        self.diff_behaviour = json_data["diff_behaviour"]
         self.run = json_data["run"]
         self.timestamp = json_data["timestamp"]
         self.elapsed = json_data["elapsed"]
@@ -282,8 +282,8 @@ class DeepHyperionSample(MNistSample):
 
         # Set MNistSample attributes
         self.performance = json_data["performance"]
-        self.predicted_label = json_data["predicted_label"]
-        self.expected_label = json_data["expected_label"]
+        self.predicted_label1 = json_data["predicted_label1"]
+        self.predicted_label2 = json_data["predicted_label2"]
         self.seed = json_data["seed"]
 
         # Store to file besides the input json
