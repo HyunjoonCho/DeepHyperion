@@ -8,8 +8,8 @@ import numpy as np
 NAMESPACE = '{http://www.w3.org/2000/svg}'
 
 
-def bitmap_count(digit, threshold):
-    image = deepcopy(digit.purified)
+def bitmap_count(clothes, threshold):
+    image = deepcopy(clothes.purified)
     bw = np.asarray(image)
     #bw = bw / 255.0
     count = 0
@@ -19,8 +19,8 @@ def bitmap_count(digit, threshold):
     return count
 
 
-def move_distance(digit):
-    root = ET.fromstring(digit.xml_desc)
+def move_distance(clothes):
+    root = ET.fromstring(clothes.xml_desc)
     svg_path = root.find(NAMESPACE + 'path').get('d')
     pattern = re.compile('([\d\.]+),([\d\.]+)\sM\s([\d\.]+),([\d\.]+)')
     segments = pattern.findall(svg_path)
@@ -38,10 +38,10 @@ def move_distance(digit):
         return 0
 
 
-def orientation_calc(digit, threshold):
+def orientation_calc(clothes, threshold):
     x = []
     y = []
-    image = deepcopy(digit.purified)
+    image = deepcopy(clothes.purified)
     bw = np.asarray(image)
     for _, ix, iy, _ in np.ndindex(bw.shape):
         if bw[_, ix, iy, _] > threshold:

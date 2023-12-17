@@ -1,4 +1,4 @@
-# DeepHyperion-MNIST #
+# DeepHyperion-FMNIST #
 
 Input test generator using illumination search algorithm
 
@@ -8,7 +8,7 @@ This tool is developed in Python on top of the DEAP evolutionary computation fra
 
 ## Dependencies ##
 
-> NOTE: If you want to use DeepHyperion-MNIST easily without configuring your environment from scratch, you can also see [__Getting Started__](../documentation/getting_started.md)
+> NOTE: If you want to use DeepHyperion-FMNIST easily without configuring your environment from scratch, you can also see [__Getting Started__](../documentation/getting_started.md)
 
 ### Configuring Ubuntu ###
 Pull an Ubuntu Docker image, run and configure it by typing in the terminal:
@@ -29,11 +29,11 @@ apt install -y git
 
 ### Copy the project into the docker container ###
 
-To copy DeepHyperion-MNIST inside the docker container, open another console and run:
+To copy DeepHyperion-FMNIST inside the docker container, open another console and run:
 
 ``` 
 cd <DEEP_HYPERION_HOME>
-docker cp DeepHyperion-MNIST/ <DOCKER_ID>:/
+docker cp DeepHyperion-FMNIST/ <DOCKER_ID>:/
 ```
 
 Where `<DEEP_HYPERION_HOME>` is the location in which you downloaded the artifact and `<DOCKER_ID>` is the ID of the ubuntu docker image just started.
@@ -93,7 +93,7 @@ apt install -y python3-venv
 Create the python virtual environment:
 
 ```
-cd /DeepHyperion-MNIST
+cd /DeepHyperion-FMNIST
 python3 -m venv .venv
 ```
 
@@ -134,7 +134,7 @@ apt install -y libgirepository1.0-dev gcc libcairo2-dev pkg-config python3-dev g
 This tool has other dependencies, including `tensorflow` and `deap`, that can be installed via `pip`:
 
 ```
-cd /DeepHyperion-MNIST
+cd /DeepHyperion-FMNIST
 pip install -r requirements.txt
 ``` 
 
@@ -142,7 +142,7 @@ pip install -r requirements.txt
 ### Input ###
 
 * A trained model in h5 format. The default one is in the folder `models`;
-* A list of seeds used for the input generation. In this implementation, the seeds are indexes of elements of the MNIST dataset. The default list is in the file `bootstraps_five`;
+* A list of seeds used for the input generation. In this implementation, the seeds are indexes of elements of the FMNIST dataset. The default list is in the file `bootstraps_five`;
 * `properties.py` containing the configuration of the tool selected by the user.
 
 ### Run the Tool ###
@@ -150,7 +150,7 @@ pip install -r requirements.txt
 To run the command execute:
 
 ```
-python mapelites_mnist.py
+python mapelites_fmnist.py
 ```
 
 ### Output ###
@@ -164,7 +164,7 @@ When the run is finished, the tool produces the following outputs in the `logs` 
 
 ### Generate Processed Data and Rescaled Maps ###
 
-* [__DeepHyperion-MNIST/report_generator__](../DeepHyperion-MNIST/report_generator/README.md)
+* [__DeepHyperion-FMNIST/report_generator__](../DeepHyperion-FMNIST/report_generator/README.md)
 
 
 ## Troubleshooting ##

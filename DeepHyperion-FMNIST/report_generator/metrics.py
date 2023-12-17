@@ -10,17 +10,17 @@ from itertools import tee
 NAMESPACE = '{http://www.w3.org/2000/svg}'
 BITMAP_THRESHOLD = 0.5
 
-def dark_bitmaps(digit):
+def dark_bitmaps(clothes):
     count = 0
-    iterator = np.nditer(digit)
+    iterator = np.nditer(clothes)
     for x in iterator:
         if x > BITMAP_THRESHOLD:
             count += 1
     return count
 
 
-def move_distance(digit):
-    root = ET.fromstring(digit)
+def move_distance(clothes):
+    root = ET.fromstring(clothes)
     svg_path = root.find(NAMESPACE + 'path').get('d')
     pattern = re.compile('([\d\.]+),([\d\.]+)\sM\s([\d\.]+),([\d\.]+)')
     segments = pattern.findall(svg_path)
@@ -38,10 +38,10 @@ def move_distance(digit):
         return 0
 
 
-def orientation_calc(digit):
+def orientation_calc(clothes):
     x = []
     y = []
-    image = copy.deepcopy(digit)
+    image = copy.deepcopy(clothes)
     bw = image
     for _, ix,iy, _ in np.ndindex(bw.shape):
         if bw[_,ix,iy,_] > 0:

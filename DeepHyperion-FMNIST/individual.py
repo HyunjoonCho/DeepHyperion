@@ -1,5 +1,5 @@
 import predictor
-from digit_mutator import DigitMutator
+from clothes_mutator import ClothesMutator
 
 
 class Individual(object):
@@ -27,6 +27,6 @@ class Individual(object):
         return self.ff
 
     def mutate(self):
-        DigitMutator(self.member).mutate()
+        ClothesMutator(self.member).mutate()
         self.reset()
 

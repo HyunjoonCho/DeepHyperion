@@ -45,10 +45,10 @@ class Sample:
         return sample
 
 
-class MNistSample(Sample):
+class FMNistSample(Sample):
 
     def __init__(self, basepath):
-        super(MNistSample, self).__init__()
+        super(FMNistSample, self).__init__()
         self.basepath = basepath
         self.performance = None
         self.seed = None
@@ -59,7 +59,7 @@ class MNistSample(Sample):
 
     def to_dict(self):
         """
-            This is common for all the MNIST samples
+            This is common for all the FMNIST samples
         """
 
         return {'id': self.id,
@@ -86,14 +86,14 @@ class MNistSample(Sample):
             (json.dump(data, f, sort_keys=True, indent=4))
 
 
-class DLFuzzSample(MNistSample):
+class DLFuzzSample(FMNistSample):
     """
 
     A DLFuzz sample is a sample made of the following json, plus an xml and npy.
 
     {
     "elapsed": "0:00:37.304367",                (Sample)
-    "expected_label": 5,                        (MNistSample)
+    "expected_label": 5,                        (FMNistSample)
     "features": [                               (None)
         "Bitmaps",
         "Orientation",
@@ -101,10 +101,10 @@ class DLFuzzSample(MNistSample):
     ],
     "id": 98,                                   (Sample)
     "misbehaviour": false,                      (Sample)
-    "performance": "0.9999646",                 (MNistSample)
-    "predicted_label": 5,                       (MNistSample)
+    "performance": "0.9999646",                 (FMNistSample)
+    "predicted_label": 5,                       (FMNistSample)
     "run": "0",                                 (Sample)
-    "seed": " 2003",                            (MNistSample)
+    "seed": " 2003",                            (FMNistSample)
     "timestamp": "2020-12-23 18:01:34.255625",  (Sample)
     "tool": "DLFuzz"                            (Sample)
     }
@@ -142,7 +142,7 @@ class DLFuzzSample(MNistSample):
         self.features["bitmaps"] = metrics.dark_bitmaps(self.image)
         self.features["orientation"] = metrics.orientation_calc(self.image)
 
-        # Set MNistSample attributes
+        # Set FMNistSample attributes
         self.performance = json_data["performance"]
         self.predicted_label = json_data["predicted_label"]
         self.expected_label = json_data["expected_label"]
@@ -152,7 +152,7 @@ class DLFuzzSample(MNistSample):
         self.dump()
 
 
-class DeepJanusSample(MNistSample):
+class DeepJanusSample(FMNistSample):
     """
 
     A DeepJanus sample is a sample made of the following json, plus an xml and svg.
@@ -161,7 +161,7 @@ class DeepJanusSample(MNistSample):
 
     {
     "elapsed": "0:00:37.304367",                (Sample)
-    "expected_label": 5,                        (MNistSample)
+    "expected_label": 5,                        (FMNistSample)
     "features": [                               (None)
         "Bitmaps",
         "Orientation",
@@ -169,10 +169,10 @@ class DeepJanusSample(MNistSample):
     ],
     "id": 98,                                   (Sample)
     "misbehaviour": false,                      (Sample)
-    "performance": "0.9999646",                 (MNistSample)
-    "predicted_label": 5,                       (MNistSample)
+    "performance": "0.9999646",                 (FMNistSample)
+    "predicted_label": 5,                       (FMNistSample)
     "run": "0",                                 (Sample)
-    "seed": " 2003",                            (MNistSample)
+    "seed": " 2003",                            (FMNistSample)
     "timestamp": "2020-12-23 18:01:34.255625",  (Sample)
     "tool": "DeepJanus"                         (Sample)
     }
@@ -212,7 +212,7 @@ class DeepJanusSample(MNistSample):
         self.features["bitmaps"] = metrics.dark_bitmaps(self.image)
         self.features["orientation"] = metrics.orientation_calc(self.image)
 
-        # Set MNistSample attributes
+        # Set FMNistSample attributes
         self.performance = json_data["performance"]
         self.predicted_label = json_data["predicted_label"]
         self.expected_label = json_data["expected_label"]
@@ -222,14 +222,14 @@ class DeepJanusSample(MNistSample):
         self.dump()
 
 
-class DeepHyperionSample(MNistSample):
+class DeepHyperionSample(FMNistSample):
     """
 
     A DeepHyperion sample is a sample similar to DeepJanusSample
 
     {
     "elapsed": "0:00:37.304367",                (Sample)
-    "expected_label": 5,                        (MNistSample)
+    "expected_label": 5,                        (FMNistSample)
     "features": [                               (None)
         "Bitmaps",
         "Orientation",
@@ -237,10 +237,10 @@ class DeepHyperionSample(MNistSample):
     ],
     "id": 98,                                   (Sample)
     "misbehaviour": false,                      (Sample)
-    "performance": "0.9999646",                 (MNistSample)
-    "predicted_label": 5,                       (MNistSample)
+    "performance": "0.9999646",                 (FMNistSample)
+    "predicted_label": 5,                       (FMNistSample)
     "run": "0",                                 (Sample)
-    "seed": " 2003",                            (MNistSample)
+    "seed": " 2003",                            (FMNistSample)
     "timestamp": "2020-12-23 18:01:34.255625",  (Sample)
     "tool": "DeepHyperion"                         (Sample)
     }
@@ -280,7 +280,7 @@ class DeepHyperionSample(MNistSample):
         self.features["bitmaps"] = metrics.dark_bitmaps(self.image)
         self.features["orientation"] = metrics.orientation_calc(self.image)
 
-        # Set MNistSample attributes
+        # Set FMNistSample attributes
         self.performance = json_data["performance"]
         self.predicted_label = json_data["predicted_label"]
         self.expected_label = json_data["expected_label"]

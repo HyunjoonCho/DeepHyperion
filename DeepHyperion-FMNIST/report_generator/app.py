@@ -177,22 +177,22 @@ def generate_samples(ctx, force_attribute, filter_samples_by_tshd, asfault_n_sec
 
     """
 
-    # --filter-samples-by-tshd applies only to MNIST
-    mnist_filter = None
+    # --filter-samples-by-tshd applies only to FMNIST
+    fmnist_filter = None
     if filter_samples_by_tshd[0] is not None:
         # Make sure the import is done only if needed, this code is problematic if the libraries are not installed
         if ctx.obj['show-progress']:
             print("Filtering samples by TSHD, %s, %s" % (filter_samples_by_tshd))
             from report_generator.tshd_selection import is_valid_digit
-            # Use the is_valid_digit and the input to create a partial function to filter the mnist inputs.
+            # Use the is_valid_digit and the input to create a partial function to filter the fmnist inputs.
             # the partial function accepts now only ONE input, the sample, and is configured automatically with type
             # and val
             # The lambda makes sure that we apply partial correctly
-            mnist_filter = partial( lambda tshd_type, tshd_val, sample :
+            fmnist_filter = partial( lambda tshd_type, tshd_val, sample :
                                                 is_valid_digit(sample, tshd_type, tshd_val),
                                     str(filter_samples_by_tshd[0]), float(filter_samples_by_tshd[1]))
             # Make sure we record the filter setting so we can store it inside th sample file
-            setattr(mnist_filter, "filter_name", "-".join(["tshd",
+            setattr(fmnist_filter, "filter_name", "-".join(["tshd",
                                                            str(filter_samples_by_tshd[0]), str(filter_samples_by_tshd[1])]))
 
     # Setup the generation. Select the
@@ -246,10 +246,10 @@ def generate_samples(ctx, force_attribute, filter_samples_by_tshd, asfault_n_sec
                     if cast_as == "DLFuzz":
                         sample = DLFuzzSample(os.path.splitext(sample_file)[0])
                         # add validity and re-dump if necessaty
-                        if mnist_filter is not None:
-                            is_valid = mnist_filter(sample)
+                        if fmnist_filter is not None:
+                            is_valid = fmnist_filter(sample)
                             sample.is_valid = is_valid
-                            sample.valid_according_to = mnist_filter.filter_name
+                            sample.valid_according_to = fmnist_filter.filter_name
                             # We need this because dump is done automatically in the constructor,
                             # BEFORE we can check for validity
                             sample.dump()
@@ -259,10 +259,10 @@ def generate_samples(ctx, force_attribute, filter_samples_by_tshd, asfault_n_sec
                     elif cast_as == "DeepJanus":
                         sample = DeepJanusSample(os.path.splitext(sample_file)[0])
                         # add validity and re-dump if necessaty
-                        if mnist_filter is not None:
-                            is_valid = mnist_filter(sample)
+                        if fmnist_filter is not None:
+                            is_valid = fmnist_filter(sample)
                             sample.is_valid = is_valid
-                            sample.valid_according_to = mnist_filter.filter_name
+                            sample.valid_according_to = fmnist_filter.filter_name
                             # We need this because dump is done automatically in the constructor,
                             # BEFORE we can check for validity
                             sample.dump()
@@ -271,10 +271,10 @@ def generate_samples(ctx, force_attribute, filter_samples_by_tshd, asfault_n_sec
                     elif cast_as == "DeepHyperion":
                         sample = DeepHyperionSample(os.path.splitext(sample_file)[0])
                         # add validity and re-dump if necessaty
-                        if mnist_filter is not None:
-                            is_valid = mnist_filter(sample)
+                        if fmnist_filter is not None:
+                            is_valid = fmnist_filter(sample)
                             sample.is_valid = is_valid
-                            sample.valid_according_to = mnist_filter.filter_name
+                            sample.valid_according_to = fmnist_filter.filter_name
                             # We need this because dump is done automatically in the constructor,
                             # BEFORE we can check for validity
                             sample.dump()
@@ -320,7 +320,7 @@ def extract_stats(ctx, report_missing_features, parsable, feature, dataset_folde
         feature: the list of name of the features to consider during the analysis
 
         dataset_folder: this is the root folder that contains all the results (i.e., samples as json) from all the
-        tools considered in one analysis (e.g., MNIST, BeamNG)
+        tools considered in one analysis (e.g., FMNIST, BeamNG)
 
         parsable: a flag to generate an easy to parse data
 
