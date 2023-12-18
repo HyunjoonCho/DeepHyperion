@@ -6,7 +6,8 @@ This work originated from the paper "DeepHyperion: Exploring the Feature Space o
 
 ## Getting Started ##
 
-Click [here](./documentation/getting_started.md) to see how to set up DeepHyperion and validate its general functionality by using our pre-configured Docker image.
+Click [here](./documentation/getting_started.md) to see how to set up DeepHyperion and validate its general functionality by using our pre-configured Docker image.  
+You may copy our version to the contatiner to run it without any setup.
 
 ## Detailed Description ##
 
@@ -15,7 +16,8 @@ Click [here](./documentation/details.md) to see how to validate the paper’s cl
 ## Repository Structure ##
 The package is structured as follows:
 
-* [__DeepHyperion-MNIST__](./DeepHyperion-MNIST) contains the differential DeepHyperion tool adapted to the handwritten digit classification case study and the instructions on how to use it;
+* [__DeepHyperion-MNIST__](./DeepHyperion-MNIST) contains the diff-behavior DeepHyperion tool adapted to the MNIST dataset;
+* [__DeepHyperion-FMNIST__](./DeepHyperion-FMNIST) contains the DeepHyperion tool adapted to the Fashion-MNIST(FMNIST) dataset;
 * [__experiments__](./experiments) contains the raw experimental data and the scripts to obtain the results reported in the paper;
 * [__documentation__](./documentation) contains a quick installation guide and a detailed description of the tool.
 
